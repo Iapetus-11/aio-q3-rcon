@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "quake3-rcon"
+version = "0.0.0"
+description = "An async Quake 3 RCON implementation"
+authors = ["Milo Weinberg <iapetus011@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "quake3_rcon"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+asyncio-dgram = "^2.1.2"
+
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^0.982"
+flake8 = "^5.0.4"
+isort = "^5.10.1"
+black = "^22.10.0"
+autoflake = "^1.7.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ['py310']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+files = ["quake3_rcon/**/*.py"]
+python_version = "3.10"
+warn_unused_configs = true
+namespace_packages = true
+explicit_package_bases = true
+strict = true
