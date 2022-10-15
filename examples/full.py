@@ -1,12 +1,12 @@
 import asyncio
 import logging
 
-from quake3_rcon import Client
+from aioq3rcon import Client
 
 
 async def main():
     logging.basicConfig()
-    logger = logging.getLogger("quake3-rcon")
+    logger = logging.getLogger("aio-q3-rcon")
     logger.setLevel(logging.DEBUG)
 
     async with Client(

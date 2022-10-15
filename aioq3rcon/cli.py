@@ -5,10 +5,10 @@ import typing as t
 import click
 import validators  # type: ignore
 
-from quake3_rcon import Client, IncorrectPasswordError
+from . import Client, IncorrectPasswordError
 
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("quake3-rcon")
+logger = logging.getLogger("aio-q3-rcon")
 
 EXTRA_VALID_ADDRESSES = {
     "localhost",

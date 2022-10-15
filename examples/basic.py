@@ -1,6 +1,6 @@
 import asyncio
 
-from quake3_rcon import Client
+from aioq3rcon import Client
 
 
 async def main():

@@ -1,13 +1,13 @@
-# quake3-rcon
+# aio-q3-rcon
 *An async Quake 3 RCON implementation for Python*
 
 ## Installation
 ```
-pip install quake3-rcon
+pip install aio-q3-rcon
 ```
 or with the cli extra
 ```
-pip install quake3-rcon[cli]
+pip install aio-q3-rcon[cli]
 ```
 
 ## CLI Usage
@@ -27,7 +27,7 @@ Options:
 ## API Reference
 #### [Examples Folder](examples)
 
-#### *class* [`Client`](quake3_rcon/client.py)(`host`: *`str`*, `port`: *`int`*, `timeout`: *`float`*, `fragment_read_timeout`: *`float`*, `retries`: *`int`*, `logger`: *`Logger | None`*)
+#### *class* [`Client`](aioq3rcon/client.py)(`host`: *`str`*, `port`: *`int`*, `timeout`: *`float`*, `fragment_read_timeout`: *`float`*, `retries`: *`int`*, `logger`: *`Logger | None`*)
 - Parameters:
   - `host`: *`str`* - *the host / IP / domain of the server to connect to*
   - `port`: *`port`* - *the port of the server to connect to*
@@ -53,7 +53,7 @@ Options:
   - `close`() -> *`None`*
     - *closes the connection to the server*
     - *if `Client` is being used as a context manager, this will be called automatically upon exit*
-#### *exception* [`RCONError`](quake3_rcon/errors.py)
-- Base exception all quake3-rcon errors derive from
-#### *exception* [`IncorrectPasswordError`](quake3_rcon/errors.py)
+#### *exception* [`RCONError`](aioq3rcon/errors.py)
+- Base exception all aio-q3-rcon errors derive from
+#### *exception* [`IncorrectPasswordError`](aioq3rcon/errors.py)
 - Raised when the provided password is incorrect

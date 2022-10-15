@@ -33,7 +33,7 @@ class Client:
         self.fragment_read_timeout = fragment_read_timeout
         self.retries = retries
 
-        self.logger = logger or logging.getLogger("quake3-rcon")
+        self.logger = logger or logging.getLogger("aio-q3-rcon")
         if logger is None:
             self.logger.disabled = True
 
