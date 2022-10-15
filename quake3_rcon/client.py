@@ -70,7 +70,7 @@ class Client:
                     "The call to %s failed and it may be retried", call, exc_info=True
                 )
 
-                if exc is not None:
+                if exc is None:
                     exc = e
 
         if exc is not None:
@@ -88,8 +88,8 @@ class Client:
 
         self.logger.debug("Connecting to %s:%s", self.host, self.port)
 
-        self._dgram = await self._retry(
-            lambda: asyncio.wait_for(asyncio_dgram.connect((self.host, self.port)), self.timeout)
+        self._dgram = await asyncio.wait_for(
+            self._retry(lambda: asyncio_dgram.connect((self.host, self.port))), self.timeout
         )
 
         if verify and not (await self.send_command("heartbeat")).startswith("print\n"):
@@ -122,7 +122,7 @@ class Client:
 
         data = data[4:]
 
-        if data == b"Bad rconpassword.":
+        if data == b"print\nBad rconpassword.\n":
             raise IncorrectPasswordError()
 
         if interpret:
@@ -160,6 +160,10 @@ class Client:
 
         return bytes(data)
 
+    async def _send_command(self, command: str) -> None:
+        message = (b"\xFF" * 4) + f'rcon "{self.password}" {command}'.encode("ascii")
+        await self._get_dgram().send(message)
+
     async def send_command(self, command: str, *, interpret: bool = False) -> str:
         """
         Sends a command to the server and reads the response back.
@@ -168,8 +172,7 @@ class Client:
         in the in-game chat.
         """
 
-        message = (b"\xFF" * 4) + f'rcon "{self.password}" {command}'.encode("ascii")
-        await self._retry(lambda: asyncio.wait_for(self._get_dgram().send(message), self.timeout))
+        await asyncio.wait_for(self._retry(lambda: self._send_command(command)), self.timeout)
 
         response = await asyncio.wait_for(self._get_response(interpret), self.timeout)
 

@@ -57,4 +57,3 @@ Options:
 - Base exception all quake3-rcon errors derive from
 #### *exception* [`IncorrectPasswordError`](quake3_rcon/errors.py)
 - Raised when the provided password is incorrect
-    
