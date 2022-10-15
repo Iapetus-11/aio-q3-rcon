@@ -44,12 +44,11 @@ class Client:
         return self
 
     async def __aexit__(
-        self, exc_type: t.Type[Exception], exc_val: Exception, exc_tb: t.Any
-    ) -> None:
+        self, exc_type: t.Type[Exception] | None, exc_val: Exception | None, exc_tb: t.Any
+    ) -> bool:
         await self.close()
 
-        if exc_val:
-            raise exc_val
+        return False  # indicate we don't want to supress the exception
 
     def _get_dgram(self) -> asyncio_dgram.DatagramClient:
         if self._dgram is None:
