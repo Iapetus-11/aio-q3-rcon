@@ -1,2 +1,3 @@
 # quake3-rcon
-An async Quake 3 RCON implementation
+*An async Quake 3 RCON implementation for Python*
+

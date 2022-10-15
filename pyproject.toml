@@ -11,13 +11,21 @@ packages = [{include = "quake3_rcon"}]
 python = "^3.10"
 asyncio-dgram = "^2.1.2"
 
-
 [tool.poetry.group.dev.dependencies]
 mypy = "^0.982"
 flake8 = "^5.0.4"
 isort = "^5.10.1"
 black = "^22.10.0"
 autoflake = "^1.7.5"
+
+
+[tool.poetry.group.cli.dependencies]
+asyncclick = "^8.1.3.4"
+anyio = "^3.6.1"
+validators = "^0.20.0"
+
+[tool.poetry.scripts]
+q3rcon = "quake3_rcon.cli:rcon"
 
 [build-system]
 requires = ["poetry-core"]
