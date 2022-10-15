@@ -160,7 +160,7 @@ class Client:
 
         return bytes(data)
 
-    async def _send_command(self, command: str):
+    async def _send_command(self, command: str) -> None:
         message = (b"\xFF" * 4) + f'rcon "{self.password}" {command}'.encode("ascii")
         await self._get_dgram().send(message)
 

@@ -46,7 +46,7 @@ def address_cb(ctx: click.Context, param: click.Parameter, value: t.Any) -> str:
     ):
         raise click.BadParameter("Specified address is neither a valid domain name or IP address")
 
-    return value
+    return t.cast(str, value)
 
 
 def integer_range_cb(ctx: click.Context, param: click.Parameter, value: t.Any) -> int | None:
@@ -65,7 +65,7 @@ def integer_range_cb(ctx: click.Context, param: click.Parameter, value: t.Any) -
             f"{param.human_readable_name} must be between {param.type.min} and {param.type.max}"
         )
 
-    return value
+    return t.cast(int, value)
 
 
 def float_range_cb(ctx: click.Context, param: click.Parameter, value: t.Any) -> float | None:
@@ -84,17 +84,17 @@ def float_range_cb(ctx: click.Context, param: click.Parameter, value: t.Any) -> 
             f"{param.human_readable_name} must be between {param.type.min} and {param.type.max}"
         )
 
-    return value
+    return t.cast(float, value)
 
 
-def port_cb(ctx: click.Context, param: click.Parameter, value: t.Any):
+def port_cb(ctx: click.Context, param: click.Parameter, value: t.Any) -> int:
     if value is None:
         value = ctx.params.get("port")
 
-    return integer_range_cb(ctx, param, value)
+    return t.cast(int, integer_range_cb(ctx, param, value))
 
 
-def debug_cb(ctx: click.Context, param: click.Parameter, value: t.Any):
+def debug_cb(ctx: click.Context, param: click.Parameter, value: t.Any) -> None:
     if value:
         logger.setLevel(logging.DEBUG)
 
@@ -120,8 +120,8 @@ def rcon(
     timeout: float,
     fragment_read_timeout: float,
     retries: int,
-):
-    async def _rcon():
+) -> None:
+    async def _rcon() -> None:
         client = Client(
             address,
             port,
