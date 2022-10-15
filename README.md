@@ -1,4 +1,4 @@
-# aio-q3-rcon
+# aio-q3-rcon ![PYPI Version](https://img.shields.io/pypi/v/aio-q3-rcon.svg) [![CI](https://github.com/Iapetus-11/aio-q3-rcon/actions/workflows/ci.yml/badge.svg)](https://github.com/Iapetus-11/aio-q3-rcon/actions/workflows/ci.yml)
 *An async Quake 3 RCON implementation for Python*
 
 ## Installation
