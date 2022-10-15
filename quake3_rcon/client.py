@@ -13,7 +13,17 @@ T = t.TypeVar("T")
 
 
 class Client:
-    def __init__(self, host: str, port: int = 27960, password: str = 'secret', *, timeout: float = 2.0, fragment_read_timeout: float = 0.25, retries: int = 2, logger: logging.Logger | None = None):
+    def __init__(
+        self,
+        host: str,
+        port: int = 27960,
+        password: str = "secret",
+        *,
+        timeout: float = 2.0,
+        fragment_read_timeout: float = 0.25,
+        retries: int = 2,
+        logger: logging.Logger | None = None,
+    ):
         self.host = host
         self.port = port
 
@@ -23,7 +33,7 @@ class Client:
         self.fragment_read_timeout = fragment_read_timeout
         self.retries = retries
 
-        self.logger = logger or logging.getLogger('quake3-rcon')
+        self.logger = logger or logging.getLogger("quake3-rcon")
         if logger is None:
             self.logger.disabled = True
 
@@ -33,7 +43,9 @@ class Client:
         await self.connect()
         return self
 
-    async def __aexit__(self, exc_type: t.Type[Exception], exc_val: Exception, exc_tb: t.Any) -> None:
+    async def __aexit__(
+        self, exc_type: t.Type[Exception], exc_val: Exception, exc_tb: t.Any
+    ) -> None:
         await self.close()
 
         if exc_val:
@@ -54,7 +66,9 @@ class Client:
 
                 return await call()
             except Exception as e:
-                self.logger.debug("The call to %s failed and it may be retried", call, exc_info=True)
+                self.logger.debug(
+                    "The call to %s failed and it may be retried", call, exc_info=True
+                )
 
                 if exc is None:
                     exc = e
@@ -74,9 +88,11 @@ class Client:
 
         self.logger.debug("Connecting to %s:%s", self.host, self.port)
 
-        self._dgram = await asyncio.wait_for(self._retry(lambda: asyncio_dgram.connect((self.host, self.port))), self.timeout)
+        self._dgram = await asyncio.wait_for(
+            self._retry(lambda: asyncio_dgram.connect((self.host, self.port))), self.timeout
+        )
 
-        if verify and not (await self.send_command('heartbeat')).startswith("print\n"):
+        if verify and not (await self.send_command("heartbeat")).startswith("print\n"):
             raise RCONError("Invalid / unsupported server")
 
     async def close(self) -> None:
@@ -101,12 +117,12 @@ class Client:
         in the chat.
         """
 
-        if not data.startswith(b'\xFF' * 4):
+        if not data.startswith(b"\xFF" * 4):
             raise ValueError("Invalid data received from server")
 
         data = data[4:]
 
-        if data == b'print\nBad rconpassword.\n':
+        if data == b"print\nBad rconpassword.\n":
             raise IncorrectPasswordError()
 
         if interpret:
@@ -134,7 +150,9 @@ class Client:
         while (time.perf_counter() - start_time) < self.timeout:
             try:
                 part: bytes
-                part, remote = await asyncio.wait_for(self._get_dgram().recv(), self.fragment_read_timeout)
+                part, remote = await asyncio.wait_for(
+                    self._get_dgram().recv(), self.fragment_read_timeout
+                )
                 self.logger.debug("Received %s from %s", part, remote)
                 data.extend(self._process_response(part, interpret=interpret))
             except asyncio.TimeoutError:
@@ -143,7 +161,7 @@ class Client:
         return bytes(data)
 
     async def _send_command(self, command: str):
-        message = (b'\xFF' * 4) + f'rcon "{self.password}" {command}'.encode("ascii")
+        message = (b"\xFF" * 4) + f'rcon "{self.password}" {command}'.encode("ascii")
         await self._get_dgram().send(message)
 
     async def send_command(self, command: str, *, interpret: bool = False) -> str:
