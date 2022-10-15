@@ -1,11 +1,13 @@
 [tool.poetry]
 name = "quake3-rcon"
-version = "0.0.0"
-description = "An async Quake 3 RCON implementation"
+version = "1.0.0"
+description = "An async Quake 3 RCON implementation with a CLI"
 authors = ["Milo Weinberg <iapetus011@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 packages = [{include = "quake3_rcon"}]
+repository = "https://github.com/Iapetus-11/quake3-rcon"
+keywords = ["quake3", "rcon", "q3", "q3rcon"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -18,14 +20,13 @@ isort = "^5.10.1"
 black = "^22.10.0"
 autoflake = "^1.7.5"
 
-
 [tool.poetry.group.cli.dependencies]
-asyncclick = "^8.1.3.4"
-anyio = "^3.6.1"
 validators = "^0.20.0"
+anyio = "^3.6.1"
+click = "^8.1.3"
 
 [tool.poetry.scripts]
-q3rcon = "quake3_rcon.cli:rcon"
+q3rcon = { callable = "quake3_rcon.cli:rcon", extras = ["cli"] }
 
 [build-system]
 requires = ["poetry-core"]
