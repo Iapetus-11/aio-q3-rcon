@@ -121,7 +121,7 @@ class Client:
 
         data = data[4:]
 
-        if data == b"print\nBad rconpassword.\n":
+        if data in (b"print\nBad rconpassword.\n", b"print\nBad rcon"):
             raise IncorrectPasswordError()
 
         if interpret:
