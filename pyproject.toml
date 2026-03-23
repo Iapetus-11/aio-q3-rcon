@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aio-q3-rcon"
-version = "1.0.0"
+version = "1.0.1"
 description = "An async Quake 3 RCON implementation with a CLI"
 authors = ["Milo Weinberg <iapetus011@gmail.com>"]
 license = "MIT"
