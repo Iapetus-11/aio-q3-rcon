@@ -2,12 +2,15 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import re
 import time
 import typing as t
 
 import asyncio_dgram
 
 from .errors import IncorrectPasswordError, RCONError
+
+COLOR_CODE_RE = re.compile(rb"\^[0-9A-Za-z]")
 
 T = t.TypeVar("T")
 
@@ -130,7 +133,7 @@ class Client:
             if data.startswith(b"print "):
                 data = data.removeprefix(b"print ")
 
-            data = data.strip(b'" \n\r')
+            data = COLOR_CODE_RE.sub(b"", data)
 
         return data
 
@@ -157,7 +160,11 @@ class Client:
             except asyncio.TimeoutError:
                 break
 
-        return bytes(data)
+        response = bytes(data)
+        if interpret:
+            response = response.rstrip(b"\r\n")
+
+        return response
 
     async def _send_command(self, command: str) -> None:
         message = (b"\xFF" * 4) + f'rcon "{self.password}" {command}'.encode("ascii")
