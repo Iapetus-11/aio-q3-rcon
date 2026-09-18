@@ -91,8 +91,12 @@ class Client:
             self._retry(lambda: asyncio_dgram.connect((self.host, self.port))), self.timeout
         )
 
-        if verify and not (await self.send_command("heartbeat")).startswith("print\n"):
-            raise RCONError("Invalid / unsupported server")
+        try:
+            if verify and not (await self.send_command("heartbeat")).startswith("print\n"):
+                raise RCONError("Invalid / unsupported server")
+        except Exception:
+            await self.close()
+            raise
 
     async def close(self) -> None:
         """Closes the connection between the server and client."""
@@ -116,7 +120,7 @@ class Client:
         in the chat.
         """
 
-        if not data.startswith(b"\xFF" * 4):
+        if not data.startswith(b"\xff" * 4):
             raise ValueError("Invalid data received from server")
 
         data = data[4:]
@@ -160,7 +164,7 @@ class Client:
         return bytes(data)
 
     async def _send_command(self, command: str) -> None:
-        message = (b"\xFF" * 4) + f'rcon "{self.password}" {command}'.encode("ascii")
+        message = (b"\xff" * 4) + f'rcon "{self.password}" {command}'.encode("ascii")
         await self._get_dgram().send(message)
 
     async def send_command(self, command: str, *, interpret: bool = False) -> str:
