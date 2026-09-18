@@ -55,5 +55,5 @@ jobs:
       - name: mypy
         run: poetry run mypy
 
-#      - name: pytest
-#        run: poetry run pytest
+      - name: pytest
+        run: poetry run pytest
