@@ -111,6 +111,12 @@ class Client:
             self._dgram = None
 
     @staticmethod
+    def _interpret_response(data: bytes) -> bytes:
+        """Remove Quake 3 display formatting from an assembled response."""
+
+        return COLOR_CODE_RE.sub(b"", data).rstrip(b"\r\n")
+
+    @staticmethod
     def _process_response(data: bytes, interpret: bool) -> bytes:
         """
         Process a response from the server.
@@ -132,8 +138,6 @@ class Client:
 
             if data.startswith(b"print "):
                 data = data.removeprefix(b"print ")
-
-            data = COLOR_CODE_RE.sub(b"", data)
 
         return data
 
@@ -162,7 +166,7 @@ class Client:
 
         response = bytes(data)
         if interpret:
-            response = response.rstrip(b"\r\n")
+            response = self._interpret_response(response)
 
         return response
 
